@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shopping.webAPI.DTOs;
+using Shopping.webAPI.Errors;
 
 namespace Shopping.webAPI.Controllers {
-  [Route ("api/[controller]")]
-  [ApiController]
-  public class ProductsController : ControllerBase {
+
+  public class ProductsController : BaseApiController {
     private readonly IGenericRepository<Product> _productRepo;
     private readonly IGenericRepository<ProductBrand> _productBrandRepo;
     private readonly IMapper _mapper;
@@ -39,6 +39,9 @@ namespace Shopping.webAPI.Controllers {
     public async Task<ActionResult<GetProductDTO>> GetProduct (int id) {
       var spec = new ProductsWithDescendants (id);
       var product = await _productRepo.GetEntityWithSpec (spec);
+      if (product == null) {
+        return NotFound (new ApiResponse (404));
+      }
       return _mapper.Map<Product, GetProductDTO> (product);
 
     }
