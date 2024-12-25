@@ -29,8 +29,8 @@ namespace Shopping.webAPI.Controllers {
     }
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<GetProductDTO>>> GetProducts () {
-      var spec = new ProductsWithDescendants ();
+    public async Task<ActionResult<IReadOnlyList<GetProductDTO>>> GetProducts (string? sort,int? brandId, int? typeId) {
+      var spec = new ProductsWithDescendants (sort,brandId,typeId);
       var products = await _productRepo.ListAsync (spec);
       return Ok (_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<GetProductDTO>> (products));
     }
