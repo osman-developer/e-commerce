@@ -14,6 +14,14 @@ var builder = WebApplication.CreateBuilder (args);
 // Add services to the container.
 
 builder.Services.AddAutoMapper (typeof (MappingProfiles));
+builder.Services.AddCors (options => {
+    options.AddPolicy ("AllowOrigin",
+        builder => {
+            builder.WithOrigins ("http://localhost:4200")
+                .AllowAnyHeader ()
+                .AllowAnyMethod ();
+        });
+});
 builder.Services.AddControllers ();
 builder.Services.AddDbContext<StoreContext> (x => x.UseSqlite (builder.Configuration.GetConnectionString ("DefaultConnection")));
 
@@ -29,7 +37,7 @@ if (app.Environment.IsDevelopment ()) {
     app.UseSwagger ();
     app.UseSwaggerUI ();
 }
-
+app.UseCors("AllowOrigin");
 app.UseMiddleware<ExceptionMiddleware> ();
 //when the client uses a route that doesn't exist we redirect it to the error controller with error code 0 =(404 not found)
 app.UseStatusCodePagesWithReExecute ("/errors/{0}");
