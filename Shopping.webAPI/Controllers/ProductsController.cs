@@ -1,9 +1,9 @@
-﻿using AutoMapper;
+﻿using API.Dtos;
+using API.Helpers;
+using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
-using Infrastructure.Data;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shopping.webAPI.DTOs;
@@ -29,10 +29,18 @@ namespace Shopping.webAPI.Controllers {
     }
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<GetProductDTO>>> GetProducts (string? sort,int? brandId, int? typeId) {
-      var spec = new ProductsWithDescendants (sort,brandId,typeId);
+    public async Task<ActionResult<Pagination<ProductToReturnDTO>>> GetProducts (
+      [FromQuery] ProductSpecParams productParams) {
+      var spec = new ProductsWithDescendants (productParams);
+      var countSpec = new ProductsWithFiltersForCountSpecification (productParams);
+
+      var totalItems = await _productRepo.CountAsync (countSpec);
       var products = await _productRepo.ListAsync (spec);
-      return Ok (_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<GetProductDTO>> (products));
+
+      var data = _mapper.Map<IReadOnlyList<ProductToReturnDTO>> (products);
+
+      return Ok (new Pagination<ProductToReturnDTO> (productParams.PageIndex,
+        productParams.PageSize, totalItems, data));
     }
 
     [HttpGet ("{id}")]
