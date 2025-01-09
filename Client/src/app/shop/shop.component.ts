@@ -4,8 +4,6 @@ import { ShopService } from './shop.service';
 import { Type } from '../shared/models/productType';
 import { Brand } from '../shared/models/brand';
 import { ShopParams } from '../shared/models/shopParams';
-import { Pagination } from '../shared/models/pagination';
-import { response } from 'express';
 
 @Component({
   selector: 'app-shop',
@@ -16,7 +14,6 @@ import { response } from 'express';
 })
 export class ShopComponent implements OnInit {
   products: Product[] = [];
-  // products: Pagination[] = [];
   types: Type[] = [];
   brands: Brand[] = [];
   totalCount!: number;
@@ -38,10 +35,11 @@ export class ShopComponent implements OnInit {
   getProducts() {
     this.shopService.getProducts(this.shopParams).subscribe({
       next: (response: any) => (
-      this.products = response.data,
-      this.shopParams.pageNumber=response.pageIndex,
-      this.shopParams.pageSize=response.pageSize,
-      this.totalCount=response.count),
+        (this.products = response.data),
+        (this.shopParams.pageNumber = response.pageIndex),
+        (this.shopParams.pageSize = response.pageSize),
+        (this.totalCount = response.count)
+      ),
       error: (error) => console.log(error),
     });
   }
