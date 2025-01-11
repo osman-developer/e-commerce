@@ -12,6 +12,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { CoreModule } from './core/core.module';
 import { ShopModule } from './shop/shop.module';
+import { HomeModule } from './home/home/home.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,6 +23,7 @@ import { ShopModule } from './shop/shop.module';
     NgbModule,
     CoreModule,
     ShopModule,
+    HomeModule
   ],
   providers: [
     provideHttpClient(withFetch()),
