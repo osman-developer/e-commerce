@@ -22,7 +22,6 @@ import { HomeModule } from './home/home/home.module';
     BrowserAnimationsModule,
     NgbModule,
     CoreModule,
-    ShopModule,
     HomeModule
   ],
   providers: [

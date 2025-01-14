@@ -44,13 +44,13 @@ namespace Shopping.webAPI.Controllers {
     }
 
     [HttpGet ("{id}")]
-    public async Task<ActionResult<GetProductDTO>> GetProduct (int id) {
+    public async Task<ActionResult<ProductToReturnDTO>> GetProduct (int id) {
       var spec = new ProductsWithDescendants (id);
       var product = await _productRepo.GetEntityWithSpec (spec);
       if (product == null) {
         return NotFound (new ApiResponse (404));
       }
-      return _mapper.Map<Product, GetProductDTO> (product);
+      return _mapper.Map<Product, ProductToReturnDTO> (product);
 
     }
 

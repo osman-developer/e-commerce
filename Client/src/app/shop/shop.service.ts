@@ -23,8 +23,8 @@ export class ShopService {
       params = params.append('typeId', shopParams.typeId.toString());
     }
 
-    if(shopParams.search){
-      params=params.append('search',shopParams.search);
+    if (shopParams.search) {
+      params = params.append('search', shopParams.search);
     }
     params = params.append('sort', shopParams.sort.toString());
     params = params.append('pageIndex', shopParams.pageNumber.toString());
@@ -37,6 +37,9 @@ export class ShopService {
           return response.body;
         })
       );
+  }
+  getProduct(id: number) {
+    return this.http.get<Product>(this.baseUrl + 'products/' + id);
   }
   getBrands() {
     return this.http.get<Brand>(this.baseUrl + 'products/brands');
